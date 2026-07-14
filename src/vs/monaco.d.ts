@@ -155,29 +155,29 @@ declare namespace monaco {
 		 */
 		readonly fragment: string;
 		/**
-		   * Returns a string representing the corresponding file system path of this Uri.
-		   * Will handle UNC paths, normalizes windows drive letters to lower-case, and uses the
-		   * platform specific path separator.
-		   *
-		   * * Will *not* validate the path for invalid characters and semantics.
-		   * * Will *not* look at the scheme of this Uri.
-		   * * The result shall *not* be used for display purposes but for accessing a file on disk.
-		   *
-		   *
-		   * The *difference* to `Uri#path` is the use of the platform specific separator and the handling
-		   * of UNC paths. See the below sample of a file-uri with an authority (UNC path).
-		   *
-		   * ```ts
-			  const u = Uri.parse('file://server/c$/folder/file.txt')
-			  u.authority === 'server'
-			  u.path === '/shares/c$/file.txt'
-			  u.fsPath === '\\server\c$\folder\file.txt'
-		  ```
-		   *
-		   * Using `Uri#path` to read a file (using fs-apis) would not be enough because parts of the path,
-		   * namely the server name, would be missing. Therefore `Uri#fsPath` exists - it's sugar to ease working
-		   * with URIs that represent files on disk (`file` scheme).
-		   */
+		 * Returns a string representing the corresponding file system path of this Uri.
+		 * Will handle UNC paths, normalizes windows drive letters to lower-case, and uses the
+		 * platform specific path separator.
+		 *
+		 * * Will *not* validate the path for invalid characters and semantics.
+		 * * Will *not* look at the scheme of this Uri.
+		 * * The result shall *not* be used for display purposes but for accessing a file on disk.
+		 *
+		 *
+		 * The *difference* to `Uri#path` is the use of the platform specific separator and the handling
+		 * of UNC paths. See the below sample of a file-uri with an authority (UNC path).
+		 *
+		 * ```ts
+			const u = Uri.parse('file://server/c$/folder/file.txt')
+			u.authority === 'server'
+			u.path === '/shares/c$/file.txt'
+			u.fsPath === '\\server\c$\folder\file.txt'
+		```
+		 *
+		 * Using `Uri#path` to read a file (using fs-apis) would not be enough because parts of the path,
+		 * namely the server name, would be missing. Therefore `Uri#fsPath` exists - it's sugar to ease working
+		 * with URIs that represent files on disk (`file` scheme).
+		 */
 		get fsPath(): string;
 		with(change: {
 			scheme?: string;
@@ -194,26 +194,26 @@ declare namespace monaco {
 		 */
 		static parse(value: string, _strict?: boolean): Uri;
 		/**
-		   * Creates a new Uri from a file system path, e.g. `c:\my\files`,
-		   * `/usr/home`, or `\\server\share\some\path`.
-		   *
-		   * The *difference* between `Uri#parse` and `Uri#file` is that the latter treats the argument
-		   * as path, not as stringified-uri. E.g. `Uri.file(path)` is **not the same as**
-		   * `Uri.parse('file://' + path)` because the path might contain characters that are
-		   * interpreted (# and ?). See the following sample:
-		   * ```ts
-		  const good = Uri.file('/coding/c#/project1');
-		  good.scheme === 'file';
-		  good.path === '/coding/c#/project1';
-		  good.fragment === '';
-		  const bad = Uri.parse('file://' + '/coding/c#/project1');
-		  bad.scheme === 'file';
-		  bad.path === '/coding/c'; // path is now broken
-		  bad.fragment === '/project1';
-		  ```
-		   *
-		   * @param path A file system path (see `Uri#fsPath`)
-		   */
+		 * Creates a new Uri from a file system path, e.g. `c:\my\files`,
+		 * `/usr/home`, or `\\server\share\some\path`.
+		 *
+		 * The *difference* between `Uri#parse` and `Uri#file` is that the latter treats the argument
+		 * as path, not as stringified-uri. E.g. `Uri.file(path)` is **not the same as**
+		 * `Uri.parse('file://' + path)` because the path might contain characters that are
+		 * interpreted (# and ?). See the following sample:
+		 * ```ts
+		const good = Uri.file('/coding/c#/project1');
+		good.scheme === 'file';
+		good.path === '/coding/c#/project1';
+		good.fragment === '';
+		const bad = Uri.parse('file://' + '/coding/c#/project1');
+		bad.scheme === 'file';
+		bad.path === '/coding/c'; // path is now broken
+		bad.fragment === '/project1';
+		```
+		 *
+		 * @param path A file system path (see `Uri#fsPath`)
+		 */
 		static file(path: string): Uri;
 		/**
 		 * Creates new Uri from uri components.
@@ -892,7 +892,7 @@ declare namespace monaco {
 		getPosition(): Position;
 		/**
 		 * Get the position at the start of the selection.
-		 */
+		*/
 		getSelectionStart(): Position;
 		/**
 		 * Create a new selection with a different `selectionStartLineNumber` and `selectionStartColumn`.
@@ -6718,7 +6718,7 @@ declare namespace monaco.languages {
 		/**
 		 * Defines a list of bracket pairs that are colorized depending on their nesting level.
 		 * If not set, the configured brackets will be used.
-		 */
+		*/
 		colorizedBracketPairs?: CharacterPair[];
 		/**
 		 * Defines what characters must be after the cursor for bracket or quote autoclosing to occur when using the \'languageDefined\' autoclosing setting.
@@ -8205,16 +8205,9 @@ declare namespace monaco.languages {
 	 * 		shorthands: [reg,act] == { regex: reg, action: act}
 	 *		and       : [reg,act,nxt] == { regex: reg, action: act{ next: nxt }}
 	 */
-	export type IShortMonarchLanguageRule1 = [
-	string | RegExp,
-	IMonarchLanguageAction
-	];
+	export type IShortMonarchLanguageRule1 = [string | RegExp, IMonarchLanguageAction];
 
-	export type IShortMonarchLanguageRule2 = [
-	string | RegExp,
-	IMonarchLanguageAction,
-	string
-	];
+	export type IShortMonarchLanguageRule2 = [string | RegExp, IMonarchLanguageAction, string];
 
 	export interface IExpandedMonarchLanguageRule {
 		/**

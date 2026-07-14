@@ -20,6 +20,7 @@
 **/extensions/vscode-api-tests/testWorkspace2/**
 **/fixtures/**
 **/node_modules/**
+**/vendor/**
 **/out-*/**/*.js
 **/out-editor-*/**
 **/out/**/*.js
