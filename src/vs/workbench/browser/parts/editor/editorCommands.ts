@@ -14,7 +14,7 @@ import { List } from "vs/base/browser/ui/list/listWidget"
 import { coalesce, distinct } from "vs/base/common/arrays"
 import { IJSONSchema } from "vs/base/common/jsonSchema"
 import { KeyChord, KeyCode, KeyMod } from "vs/base/common/keyCodes"
-import { Schemas, matchesScheme } from "vs/base/common/network"
+import { Schemas, matchesScheme, matchesSomeScheme } from "vs/base/common/network"
 import { extname, isEqual } from "vs/base/common/resources"
 import { isNumber, isObject, isString, isUndefined } from "vs/base/common/types"
 import { URI, UriComponents } from "vs/base/common/uri"
@@ -611,12 +611,33 @@ function registerOpenEditorAPICommands(): void {
         return
       }
 
-      // finally, delegate to opener service
-      else {
+      // external URLs (http/https/mailto) are handled by the opener service
+      else if (
+        matchesSomeScheme(
+          resourceOrString,
+          Schemas.http,
+          Schemas.https,
+          Schemas.mailto
+        )
+      ) {
         await openerService.open(resourceOrString, {
           openToSide: context?.sideBySide,
           editorOptions: context?.editorOptions,
         })
+      }
+
+      // otherwise open the resource as an editor on the canvas. This mirrors
+      // upstream VS Code, where `vscode.open(uri)` with no column/options still
+      // opens an editor. Without this, a bare file URI would fall through to the
+      // opener service, which has no editor opener registered in Haystack and
+      // would silently no-op (e.g. an extension's "Open File" button).
+      else {
+        const [options] = mixinContext(context, undefined, undefined)
+        const resource = URI.isUri(resourceOrString)
+          ? resourceOrString
+          : URI.parse(resourceOrString)
+
+        await haystackService.createFileEditor(resource, undefined, options)
       }
     }
   )
